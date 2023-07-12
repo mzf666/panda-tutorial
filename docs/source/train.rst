@@ -4,13 +4,11 @@ Train your LLM
 PandaLLM enables efficient training of various LLM based on the ``DeepSpeed`` acceleration framework. You can train your LLM with a customized configuration via:
 
 .. code-block:: console
-..code
     (.venv) $ bash train.sh --model llama-7b
 
 The script `./train.sh` automatically generates a training configuration file at `./conf/tmp.yaml` based on the configuration template file `./conf/template.yaml`, and then it trigger the training process by executing `./trainer_torch_fsdp_wandb.py`. You can also train your model with a customized configuration by executing
 
 .. code-block:: console
-..code
     (.venv) $ bash train.sh --conf_path ${PATH_TO_YOUR_CONF_FILE}
 
 In the following sections, we detail the workflow of training an LLM with `train.sh`.
