@@ -1,6 +1,8 @@
 Quick Start
 ==============
 
+Panda github 地址： https://github.com/dandelionsllm/pandallm
+
 
 ### 准备数据
 
