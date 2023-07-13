@@ -9,13 +9,13 @@ Train your LLM
 
 .. code-block:: console
 
-    (venv) $ python train.py --model llama-7b
+    (pandallm) $ python train.py --model llama-7b
 
 When you execute the ``train.py`` script, it automatically generates a training configuration file at ``./conf/tmp.yaml`` based on the configuration template file located at ``./conf/template.yaml``. Subsequently, the script initiates the training process by executing ``./trainer_torch_fsdp_wandb.py``. If you prefer to train your model with a personalized configuration, you can execute the following command:
 
 .. code-block:: console
 
-    (venv) $ python train.py --conf_path ${PATH_TO_YOUR_CONF_FILE}
+    (pandallm) $ python train.py --conf_path ${PATH_TO_YOUR_CONF_FILE}
 
 In the forthcoming sections, we provide a comprehensive overview of the workflow involved in training an LLM using the ``train.py`` script.
 
@@ -47,7 +47,7 @@ For compatibility purposes, please store all instruction-tuning datasets under t
 
 .. code-block:: console
 
-    (venv) $ python train.py --instruction_tuning_data_dir ${DIR_TO_YOUR_INSTUCT_DATA} --pretraining_data_dir ${DIR_TO_YOUR_PRETRAIN_DATA}
+    (pandallm) $ python train.py --instruction_tuning_data_dir ${DIR_TO_YOUR_INSTUCT_DATA} --pretraining_data_dir ${DIR_TO_YOUR_PRETRAIN_DATA}
 
 Please replace ``${DIR_TO_YOUR_INSTRUCT_DATA}`` and ``${DIR_TO_YOUR_PRETRAIN_DATA}`` with the respective directories for your custom instruction-tuning and pretraining datasets.
 
@@ -70,7 +70,7 @@ The PandaLLM framework support various LLM architectures, and you can specify th
 
 .. code-block:: console
 
-    (venv) $ python train.py --model ${MODEL_TYPE}
+    (pandallm) $ python train.py --model ${MODEL_TYPE}
 
 Here are the supported LLM architectures.
 
@@ -93,7 +93,7 @@ You can finetune a LLM based on a custom checkpoint by specifying the ``"--ckpt_
 
 .. code-block:: console
 
-    (venv) $ python train.py --model llama-7b --ckpt_path pretrain/llama-7b
+    (pandallm) $ python train.py --model llama-7b --ckpt_path pretrain/llama-7b
 
 This command will initiate the fine-tuning process for the ``llama-7b`` model, utilizing a specified ``./pretrain/llama-7b`` checkpoint. Beside the LlaMA checkpoints, you can also download all the PandaLLM checkpoints from the `official PandaLLM GitHub repository <https://github.com/dandelionsllm/pandallm#:~:text=%E4%B8%8D%E5%8F%AF%E5%95%86%E7%94%A8-,%E6%A8%A1%E5%9E%8B%E5%90%8D%E7%A7%B0,%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5,-Panda%2D7B>`_.
 
@@ -105,7 +105,7 @@ To fine-tune your custom LLM model, follow these steps:
 
     .. code-block:: console
 
-        (venv) $ python train.py --model llama-7b --ckpt_path ${FOLDER_OF_YOUR_LLM}
+        (pandallm) $ python train.py --model llama-7b --ckpt_path ${FOLDER_OF_YOUR_LLM}
 
     This command will initiate the fine-tuning process using the ``llama-7b`` model and the checkpoint from your specified directory (``./pretrained-models/FOLDER_OF_YOUR_LLM``).
 
@@ -115,7 +115,7 @@ Optimization
 ------------
 
 General settings
-^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 
 The PandaLLM framework provides several features for training, including automatic gradient accumulation, `NVLAMB <https://arxiv.org/abs/1904.00962>`_ optimizer integration, and quantization-aware training based on `BitsandBytes <https://github.com/facebookresearch/bitsandbytes>`_. To customize the training hyperparameters, you can specify the following arguments. Here is a description of each argument:
 
@@ -155,7 +155,7 @@ To finetune a ``Panda-7B`` model with a learning rate of :math:`0.002` for :math
 
 .. code-block:: console
 
-        (venv) $ python train.py --model llama-7b --ckpt_path chitanda/llama-panda-zh-7b-delta --learing_rate 2e-3 --num_train_epochs 2
+        (pandallm) $ python train.py --model llama-7b --ckpt_path chitanda/llama-panda-zh-7b-delta --learing_rate 2e-3 --num_train_epochs 2
 
 
 Low-rank adaptation (LoRA)
@@ -165,7 +165,7 @@ PandaLLM supports `LoRA <https://github.com/huggingface/peft>`_ finetuning for L
 
 .. code-block:: console
 
-        (venv) $ python train.py --model llama-65b --use_lora --lora_r 64 --lora_alpha 16 --lora_dropout 0.05
+        (pandallm) $ python train.py --model llama-65b --use_lora --lora_r 64 --lora_alpha 16 --lora_dropout 0.05
 
 You can customize the behavior of LoRA during the training process of LLMs by specifying the following arguments.
 
@@ -185,5 +185,5 @@ PandaLLM enables quantization-aware training based on the `BitsandBytes <https:/
 
 .. code-block:: console
 
-        (venv) $ python train.py --model llama-65b --use_quant
+        (pandallm) $ python train.py --model llama-65b --use_quant
 

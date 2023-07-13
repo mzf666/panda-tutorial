@@ -12,6 +12,5 @@ Contents
 
 .. toctree::
     quick_start
-    install
     train
     deploy
