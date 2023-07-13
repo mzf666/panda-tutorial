@@ -89,7 +89,7 @@ Before you can directly train the model with the following commands, make sure y
 
 2. Run the following command to train the model:
 
-.. code-block::
+.. code-block:: console
 
   (pandallm) $ deepspeed --include localhost:0,1,2,3,4,5,6,7  trainer_base_ds_mul.py -cp conf/llama/zh/ -cn llama_13b_zh_instruct_sft_combine_v1_0_ds
 
