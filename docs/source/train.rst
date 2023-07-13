@@ -1,7 +1,7 @@
 Train your LLM
 ==============
 
-PandaLLM enables efficient training of various LLMs by leveraging the ``DeepSpeed`` acceleration framework. You can train your LLM with a customized configuration using the following command:
+`PandaLLM <https://github.com/dandelionsllm/pandallm>`_ enables efficient training of various LLMs by leveraging the `DeepSpeed <https://github.com/microsoft/DeepSpeed>`_ acceleration framework and the `FairScale <https://github.com/facebookresearch/fairscale>`_ parallelization framework. You can train your LLM with a customized configuration using the following command:
 
 .. code-block:: console
 
@@ -60,7 +60,7 @@ Here are the supported LLM architectures.
     :header-rows: 1
 
     * - Architectures
-      - ``--model`` argument
+      - ``--model`` options
     * - ``LlaMA-7B``
       - ``"llama-7b"``
     * - ``LlaMA-13B``
@@ -76,27 +76,63 @@ You can finetune a LLM based on a released checkpoint by specifying the ``"--pre
 
     (venv) $ bash train.sh --model llama-7b --pretrain chitanda/llama-panda-zh-7b-delta
 
-This command will initiate the fine-tuning process for the ``llama-7b`` model, utilizing the specified checkpoint ``chitanda/llama-panda-zh-7b-delta``.You can download all the PandaLLM checkpoints from the official GitHub repository `here <https://github.com/dandelionsllm/pandallm#:~:text=%E4%B8%8D%E5%8F%AF%E5%95%86%E7%94%A8-,%E6%A8%A1%E5%9E%8B%E5%90%8D%E7%A7%B0,%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5,-Panda%2D7B>`_.
+This command will initiate the fine-tuning process for the ``llama-7b`` model, utilizing the specified ``chitanda/llama-panda-zh-7b`` checkpoint.You can download all the PandaLLM checkpoints from the official GitHub repository `here <https://github.com/dandelionsllm/pandallm#:~:text=%E4%B8%8D%E5%8F%AF%E5%95%86%E7%94%A8-,%E6%A8%A1%E5%9E%8B%E5%90%8D%E7%A7%B0,%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5,-Panda%2D7B>`_.
 
 
 To fine-tune your custom LLM model, follow these steps:
 
-1.  Convert your LLM checkpoint into the ``Huggingface`` format and save it to the folder ``DIR_TO_YOUR_LLM``.
+1.  Convert your LLM checkpoint into the ``Huggingface`` format and save it to ``./pretrained-models/FOLDER_OF_YOUR_LLM``.
 #.  Execute the following command
 
     .. code-block:: console
 
-        (venv) $ bash train.sh --model llama-7b --pretrain ${DIR_TO_YOUR_LLM}
+        (venv) $ bash train.sh --model llama-7b --pretrain ${FOLDER_OF_YOUR_LLM}
 
-    This command will initiate the fine-tuning process using the ``llama-7b`` model and the checkpoint from your specified directory (``DIR_TO_YOUR_LLM``).
-
-
-
+    This command will initiate the fine-tuning process using the ``llama-7b`` model and the checkpoint from your specified directory (``./pretrained-models/FOLDER_OF_YOUR_LLM``).
 
 
 
 Optimization Settings
 ---------------------
 
+The PandaLLM framework enables you to adjust the training hyper-parameters by specifying the following arguments. Here is a description of each argument:
+
+
+--per_gpu_train_batch_size  The batch size for each GPU during training. The default value is :math:`1`.
+
+--per_gpu_eval_batch_size  The batch size for each GPU during evaluation. The default value is :math:`2`.
+
+--optimizer  The training optimizer. The default value is ``"AdamW"``.
+
+--learning_rate  The learning rate for each batch of the model during training. The default value is :math:`1e-3`.
+
+--gradient_accumulation_steps  Number of gradient accumulation steps before performing a backward/update pass. The default value is :math:`64`.
+
+--weight_decay  The weight decay applied to all parameters of the model. The default value is :math:`0.00`.
+
+--adam_epsilon  :math:`\varepsilon` value for the Adam optimizer. The default value is :math:`1e-6`.
+
+--adam_betas  :math:`\beta` coefficients used for computing moving averages of gradients and squared gradients in the Adam optimizer. The default value is :math:`(0.9, 0.99)`.
+
+--max_grad_norm  Maximum norm for gradient clipping. The default value is :math:`0.3`.
+
+--num_train_epochs  The total number of training epochs. The default value is :math:`1`.
+
+--max_steps  The maximum number of training steps. The default value is :math:`-1`, indicating no maximum limit.
+
+--warmup_proportion  Proportion of training steps to perform linear learning rate warmup. The default value is :math:`0`.
+
+--warmup_steps  Number of warmup steps for learning rate warmup. The default value is :math:`50`.
+
+--use_nvlamb  This ``boolean`` argument determines whether to use the NVLAMB optimizer, which is an optimizer that combines NovoGrad and Lamb. The default value is ``False``.
+
+--bit_training  This ``boolean`` argument specifies the bit training mode for quantization-aware training. It determines the precision of weights and activations during training. The default value is ``False``.
+
+
+To finetune a ``Panda-7B`` model with a learning rate of :math:`2e-3` for :math:`2` epochs, execute the following command:
+
+.. code-block:: console
+
+        (venv) $ bash train.sh --model llama-7b --pretrain chitanda/llama-panda-zh-7b --learing_rate 2e-3 --num_train_epochs 2
 
 
