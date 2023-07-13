@@ -19,19 +19,19 @@ In the forthcoming sections, we provide a comprehensive overview of the workflow
 
 .. _data_preparation:
 
-Data Preparation
+Data preparation
 ----------------
 
-The first step is to prepare the training datasets for PandaLLM. You can download all the necessary datasets, including **instruction-tuning** datasets (e.g., Wiki-zh) and **pretraining datasets** (e.g., Wudao), `here <https://entuedu-my.sharepoint.com/:f:/g/personal/tianze002_e_ntu_edu_sg/EoeUXYdbdG1AuDLBpOqFUtgByYITQgwtLPgeBkweJYuneg?e=t9583n>`_. Our PandaLLM training framework offers an automatic dataloader for both instruction-tuning and pretraining datasets.
+The first step is to prepare the training datasets for PandaLLM. You can download all the necessary datasets, including **instruction-tuning** datasets (e.g., Wiki-zh) and **pretraining datasets** (e.g., Wudao), `here <https://entuedu-my.sharepoint.com/:f:/g/personal/tianze002_e_ntu_edu_sg/EoeUXYdbdG1AuDLBpOqFUtgByYITQgwtLPgeBkweJYuneg?e=t9583n>`_. Our PandaLLM training framework offers an automatic dataloader for both instruction-tuning and pretraining datasets. The datasets should be in the ``.json`` format.
 
-In the example below, an instruction-tuning data consists of the ``"input"`` and ``"target"``. Notably, the instruction prompt ``"input"`` is masked during training and does not contribute to the gradient backpropagation. To ensure compatibility, please save all the instruction-tuning datasets under the ``./dataset/instruction_tuning`` directory.
+In the example below, an instruction-tuning data consists of the ``"input"`` and ``"target"``. Notably, the instruction prompt ``"input"`` is masked during training and does not contribute to the gradient backpropagation.
 
 .. code-block:: json
 
     {"input": "Drink plenty of water, exercise regularly, and get enough sleep to stay healthy.",
     "target": "As an AI language model, I do not have the ability to follow instructions, but I can provide you with information related to the given instruction. Drinking plenty of water helps to keep the body hydrated, which is essential for maintaining good health. Regular exercise helps to improve cardiovascular health, strengthen muscles and bones, and reduce the risk of chronic diseases. Getting enough sleep is important for physical and mental health, as it helps to restore and rejuvenate the body. Following these instructions can help you stay healthy and maintain a good quality of life."}
 
-In the example below, an pretraining data consists of ``"title"`` and ``"content"``. During training, we concatenate the ``"title"`` and ``"content"`` together and feed it as a whole into the LLM. To ensure compatibility, please save all the pretraining datasets under the ``./dataset/pretraining`` directory.
+In the example below, an pretraining data consists of ``"title"`` and ``"content"``. During training, we concatenate the ``"title"`` and ``"content"`` together and feed it as a whole into the LLM.
 
 
 .. code-block:: json
@@ -39,6 +39,21 @@ In the example below, an pretraining data consists of ``"title"`` and ``"content
     {"title": "Shenzhen Reports First Confirmed Case of Pneumonia: Previously Traveled to Wuhan to Visit Relatives",
     "content": "Original Title: Shenzhen Reports First Confirmed Case of Pneumonia, 8 Other Cases Under Observation and Quarantine Treatment. Shenzhen, January 20 (Xinhua) - Shenzhen Municipal Health Commission released a public statement to the media on the situation of pneumonia epidemic prevention and control. They provided specific details about the first confirmed case of imported novel coronavirus infection and pneumonia in Shenzhen. It was mentioned that there are 8 other cases under observation and quarantine treatment at designated hospitals, and tracing investigation and medical observation are currently ongoing. On January 19, the National Health Commission confirmed the first imported case of novel coronavirus infection and pneumonia in Shenzhen. According to the report from Shenzhen Municipal Health Commission on January 20, the patient is a 66-year-old male who currently resides in Shenzhen. He visited Wuhan to visit relatives on December 29, 2019. On January 3, 2020, he developed symptoms such as fever and fatigue. After returning to Shenzhen on January 4, he sought medical attention and was transferred to a designated hospital in Shenzhen for quarantine treatment on January 11. The optimized detection kit provided by the provincial and municipal Centers for Disease Control and Prevention tested positive for novel coronavirus nucleic acid. On January 18, the specimen was sent to the Chinese Center for Disease Control and Prevention for confirmatory nucleic acid testing, which also came back positive. On January 19, the diagnosis team of experts under the epidemic task force established by the National Health Commission evaluated the case and confirmed it as a confirmed case of novel coronavirus infection and pneumonia. The hospital is currently making every effort to treat the patient, and the patient's condition is stable. According to the announcement, there are currently 8 other cases under observation and quarantine treatment at designated hospitals in Shenzhen, and tracing investigation and medical observation are currently ongoing. Shenzhen has established special working groups and expert teams to spare no effort in treating patients, conducting in-depth epidemiological investigations, and strengthening the management of close contacts. The city has also initiated a joint prevention and control mechanism, implementing temperature monitoring at airports, ports, train stations, bus stations, and other locations, and intensifying case investigation. Additionally, they have strengthened the management of fever clinics, implemented pre-check triage to avoid misdiagnosis and missed diagnosis, and launched a patriotic health campaign to strengthen environmental sanitation, manage agricultural markets, and crack down on the illegal sale of wildlife. Click to enter the topic: Wuhan Novel Coronavirus Pneumonia Outbreak Editor: Zhang Yiling"}
 
+For compatibility purposes, please store all instruction-tuning datasets under the ``./dataset/instruction_tuning`` directory, and pretraining datasets under the ``./dataset/pretraining`` directory. If you wish to train LLMs with a custom dataset, you can specify its directory using the following command:
+
+.. code-block:: console
+
+    (venv) $ bash train.sh --instruction_tuning_data_dir ${DIR_TO_YOUR_INSTUCT_DATA} --pretraining_data_dir ${DIR_TO_YOUR_PRETRAIN_DATA}
+
+Please replace ``${DIR_TO_YOUR_INSTRUCT_DATA}`` and ``${DIR_TO_YOUR_PRETRAIN_DATA}`` with the respective directories for your custom instruction-tuning and pretraining datasets.
+
+Additionally, you can further customize the dataloader by specifying the following arguments.
+
+--num_workers  This argument determines the number of worker processes to use for data loading during training. Increasing the number of workers can accelerate data loading. The default value is set to :math:`2`.
+
+--prefetch_factor  This argument determines the number of batches to prefetch. Prefetching allows the dataloader to load and prepare the next batches in advance, reducing the waiting time during training. The default value is set to :math:`2`.
+
+--max_seq_length  This argument defines the maximum sequence length allowed for input texts during training. Any input sequence exceeding this length will be truncated or split into multiple parts. The default value is set to :math:`2048`.
 
 
 
@@ -76,7 +91,7 @@ You can finetune a LLM based on a released checkpoint by specifying the ``"--pre
 
     (venv) $ bash train.sh --model llama-7b --pretrain chitanda/llama-panda-zh-7b-delta
 
-This command will initiate the fine-tuning process for the ``llama-7b`` model, utilizing the specified ``chitanda/llama-panda-zh-7b`` checkpoint.You can download all the PandaLLM checkpoints from the official GitHub repository `here <https://github.com/dandelionsllm/pandallm#:~:text=%E4%B8%8D%E5%8F%AF%E5%95%86%E7%94%A8-,%E6%A8%A1%E5%9E%8B%E5%90%8D%E7%A7%B0,%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5,-Panda%2D7B>`_.
+This command will initiate the fine-tuning process for the ``llama-7b`` model, utilizing the specified ``chitanda/llama-panda-zh-7b-delta`` checkpoint.You can download all the PandaLLM checkpoints from the official GitHub repository `here <https://github.com/dandelionsllm/pandallm#:~:text=%E4%B8%8D%E5%8F%AF%E5%95%86%E7%94%A8-,%E6%A8%A1%E5%9E%8B%E5%90%8D%E7%A7%B0,%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5,-Panda%2D7B>`_.
 
 
 To fine-tune your custom LLM model, follow these steps:
@@ -92,8 +107,11 @@ To fine-tune your custom LLM model, follow these steps:
 
 
 
-Optimization Settings
----------------------
+Optimization
+------------
+
+General settings
+^^^^^^^^^^^^^^^^^^^^^^
 
 The PandaLLM framework provides several features for training, including automatic gradient accumulation, `NVLAMB <https://arxiv.org/abs/1904.00962>`_ optimizer integration, and quantization-aware training based on `BitsandBytes <https://github.com/facebookresearch/bitsandbytes>`_. To customize the training hyperparameters, you can specify the following arguments. Here is a description of each argument:
 
@@ -126,8 +144,6 @@ The PandaLLM framework provides several features for training, including automat
 
 --warmup_steps  Number of warmup steps for learning rate warmup. The default value is :math:`50`.
 
---use_nvlamb  This ``boolean`` argument determines whether to use the NVLAMB optimizer, which is an optimizer that combines NovoGrad and Lamb. The default value is ``False``.
-
 --bit_training  This ``boolean`` argument specifies the bit training mode for quantization-aware training. It determines the precision of weights and activations during training. The default value is ``False``.
 
 
@@ -135,6 +151,35 @@ To finetune a ``Panda-7B`` model with a learning rate of :math:`0.002` for :math
 
 .. code-block:: console
 
-        (venv) $ bash train.sh --model llama-7b --pretrain chitanda/llama-panda-zh-7b --learing_rate 2e-3 --num_train_epochs 2
+        (venv) $ bash train.sh --model llama-7b --pretrain chitanda/llama-panda-zh-7b-delta --learing_rate 2e-3 --num_train_epochs 2
 
+
+Low-rank adaptation (LoRA)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+PandaLLM supports `LoRA <https://github.com/huggingface/peft>`_ finetuning for LLMs. For example, to initiate the training process for the ``LlaMA-65B`` model with LoRA, execute the following command:
+
+.. code-block:: console
+
+        (venv) $ bash train.sh --model llama-65b --use_lora --lora_r 64 --lora_alpha 16 --lora_dropout 0.05
+
+You can customize the behavior of LoRA during the training process of LLMs by specifying the following arguments.
+
+--use_lora  This ``boolean`` argument enables the usage of LoRA (Local Relevance Adaptation) during the training process. When specified, LoRA will be incorporated into the training of LLMs.
+
+--lora_r  This argument determines the number of local neighbors considered for each token during LoRA adaptation. The default value is set to :math:`64`.
+
+--lora_alpha  This argument controls the strength of adaptation for LoRA. It influences the extent to which the model adapts to local relevance. The default value is set to :math:`16`.
+
+--lora_dropout  This argument specifies the dropout rate to apply during LoRA adaptation. Dropout helps to regularize the training process and prevent overfitting. The default value is set to :math:`0.05`.
+
+
+Quantization-aware training
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+PandaLLM enables quantization-aware training based on the `BitsandBytes <https://github.com/facebookresearch/bitsandbytes>`_ framework. For example, to train a ``LlaMA-65B`` model using  `BitsandBytes` quantization scheme with :math:`4`-bit precision, execute the following command:
+
+.. code-block:: console
+
+        (venv) $ bash train.sh --model llama-65b --use_quant
 
