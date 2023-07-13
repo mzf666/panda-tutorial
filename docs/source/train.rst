@@ -76,6 +76,8 @@ You can finetune a LLM based on a released checkpoint by specifying the ``"--pre
 
     (venv) $ bash train.sh --model llama-7b --pretrain chitanda/llama-panda-zh-7b-delta
 
+This command will initiate the fine-tuning process for the ``llama-7b`` model, utilizing the specified checkpoint ``chitanda/llama-panda-zh-7b-delta``.You can download all the PandaLLM checkpoints from the official GitHub repository `here <https://github.com/dandelionsllm/pandallm#:~:text=%E4%B8%8D%E5%8F%AF%E5%95%86%E7%94%A8-,%E6%A8%A1%E5%9E%8B%E5%90%8D%E7%A7%B0,%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5,-Panda%2D7B>`_.
+
 
 To fine-tune your custom LLM model, follow these steps:
 
