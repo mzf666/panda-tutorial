@@ -5,15 +5,15 @@ PandaLLM enables efficient training of various LLMs by leveraging the ``DeepSpee
 
 .. code-block:: console
 
-    (.venv) $ bash train.sh --model llama-7b
+    (venv) $ bash train.sh --model llama-7b
 
-When you execute the train.sh script, it automatically generates a training configuration file at `./conf/tmp.yaml` based on the configuration template file located at `./conf/template.yaml`. Subsequently, the script initiates the training process by executing `./trainer_torch_fsdp_wandb.py`. If you prefer to train your model with a personalized configuration, you can execute the following command:
+When you execute the ``train.sh`` script, it automatically generates a training configuration file at ``./conf/tmp.yaml`` based on the configuration template file located at ``./conf/template.yaml``. Subsequently, the script initiates the training process by executing ``./trainer_torch_fsdp_wandb.py``. If you prefer to train your model with a personalized configuration, you can execute the following command:
 
 .. code-block:: console
 
-    (.venv) $ bash train.sh --conf_path ${PATH_TO_YOUR_CONF_FILE}
+    (venv) $ bash train.sh --conf_path ${PATH_TO_YOUR_CONF_FILE}
 
-In the forthcoming sections, we provide a comprehensive overview of the workflow involved in training an LLM using the `train.sh` script.
+In the forthcoming sections, we provide a comprehensive overview of the workflow involved in training an LLM using the ``train.sh`` script.
 
 
 
@@ -22,15 +22,16 @@ In the forthcoming sections, we provide a comprehensive overview of the workflow
 Data Preparation
 ----------------
 
-The first step is to prepare the training datasets for PandaLLM. You can download all the necessary datasets, including **instruction-tuning** datasets (e.g., Wiki-zh) and **pretraining datasets** (e.g., Wudao), `here <https://entuedu-my.sharepoint.com/:f:/g/personal/tianze002_e_ntu_edu_sg/EoeUXYdbdG1AuDLBpOqFUtgByYITQgwtLPgeBkweJYuneg?e=t9583n>`_. Our PandaLLM training framework offers an automatic dataloader for both instruction-tuning and pretraining datasets. To ensure compatibility, please save all the training datasets under the `./dataset` directory in either the instruction-tuning or pretraining dataset format.
+The first step is to prepare the training datasets for PandaLLM. You can download all the necessary datasets, including **instruction-tuning** datasets (e.g., Wiki-zh) and **pretraining datasets** (e.g., Wudao), `here <https://entuedu-my.sharepoint.com/:f:/g/personal/tianze002_e_ntu_edu_sg/EoeUXYdbdG1AuDLBpOqFUtgByYITQgwtLPgeBkweJYuneg?e=t9583n>`_. Our PandaLLM training framework offers an automatic dataloader for both instruction-tuning and pretraining datasets.
 
-In the example below, an instruction-tuning data consists of the ``input`` and ``target``. Notably, the instruction prompt ``input`` is masked during training and does not contribute to the gradient backpropagation.
+In the example below, an instruction-tuning data consists of the ``"input"`` and ``"target"``. Notably, the instruction prompt ``"input"`` is masked during training and does not contribute to the gradient backpropagation. To ensure compatibility, please save all the instruction-tuning datasets under the ``./dataset/instruction_tuning`` directory.
 
 .. code-block:: json
 
-    {"input": "Drink plenty of water, exercise regularly, and get enough sleep to stay healthy.", "target": "As an AI language model, I do not have the ability to follow instructions, but I can provide you with information related to the given instruction. Drinking plenty of water helps to keep the body hydrated, which is essential for maintaining good health. Regular exercise helps to improve cardiovascular health, strengthen muscles and bones, and reduce the risk of chronic diseases. Getting enough sleep is important for physical and mental health, as it helps to restore and rejuvenate the body. Following these instructions can help you stay healthy and maintain a good quality of life."}
+    {"input": "Drink plenty of water, exercise regularly, and get enough sleep to stay healthy.",
+    "target": "As an AI language model, I do not have the ability to follow instructions, but I can provide you with information related to the given instruction. Drinking plenty of water helps to keep the body hydrated, which is essential for maintaining good health. Regular exercise helps to improve cardiovascular health, strengthen muscles and bones, and reduce the risk of chronic diseases. Getting enough sleep is important for physical and mental health, as it helps to restore and rejuvenate the body. Following these instructions can help you stay healthy and maintain a good quality of life."}
 
-In the example below, an pretraining data consists of ``title`` and ``content``. During training,
+In the example below, an pretraining data consists of ``"title"`` and ``"content"``. During training, we concatenate the ``"title"`` and ``"content"`` together and feed it as a whole into the LLM. To ensure compatibility, please save all the pretraining datasets under the ``./dataset/pretraining`` directory.
 
 
 .. code-block:: json
@@ -41,29 +42,55 @@ In the example below, an pretraining data consists of ``title`` and ``content``.
 
 
 
-
-
-.. _train_models:
+.. _models:
 
 Models
 ------
 
-To retrieve a list of random ingredients,
-you can use the ``lumache.get_random_ingredients()`` function:
+The PandaLLM framework support various LLM architectures, and you can specify the model type using the ``--model`` argument as shown below:
 
-.. autofunction:: lumache.get_random_ingredients
+.. code-block:: console
 
-The ``kind`` parameter should be either ``"meat"``, ``"fish"``,
-or ``"veggies"``. Otherwise, :py:func:`lumache.get_random_ingredients`
-will raise an exception.
+    (venv) $ bash train.sh --model ${MODEL_TYPE}
 
-.. autoexception:: lumache.InvalidKindError
+Here are the supported LLM architectures.
 
-For example:
+.. list-table::
+    :widths: 25 25
+    :header-rows: 1
 
->>> import lumache
->>> lumache.get_random_ingredients()
-['shells', 'gorgonzola', 'parsley']
+    * - Architectures
+      - ``--model`` argument
+    * - ``LlaMA-7B``
+      - ``"llama-7b"``
+    * - ``LlaMA-13B``
+      - ``"llama-13b"``
+    * - ``LlaMA-33B``
+      - ``"llama-33b"``
+    * - ``LlaMA-65B``
+      - ``"llama-65b"``
+
+You can finetune a LLM based on a released checkpoint by specifying the ``"--pretrain"`` argument. For example, to finetune a ``Panda-7B`` model using the latest checkpoint, execute the following command:
+
+.. code-block:: console
+
+    (venv) $ bash train.sh --model llama-7b --pretrain chitanda/llama-panda-zh-7b-delta
+
+
+To fine-tune your custom LLM model, follow these steps:
+
+1.  Convert your LLM checkpoint into the ``Huggingface`` format and save it to the folder ``DIR_TO_YOUR_LLM``.
+#.  Execute the following command
+
+    .. code-block:: console
+
+        (venv) $ bash train.sh --model llama-7b --pretrain ${DIR_TO_YOUR_LLM}
+
+    This command will initiate the fine-tuning process using the ``llama-7b`` model and the checkpoint from your specified directory (``DIR_TO_YOUR_LLM``).
+
+
+
+
 
 
 Optimization Settings
