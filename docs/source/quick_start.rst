@@ -1,12 +1,13 @@
 Quick Start
-==============
+===========
 
->>> import torch
+.. autosummary::
+   :toctree: generated
 
 Panda github https://github.com/dandelionsllm/pandallm
 
-Quick Deployment
-^^^^^^^^^^^^^^^^^^^^^^
+Installation
+------------
 
 1. Download our code from github
 
@@ -23,9 +24,14 @@ Quick Deployment
     pip install -r requirements.txt
     mkdir pretrained_model
 
-3. Download LLaMA-13B from huggingface: https://huggingface.co/huggyllama/llama-13b
 
-4. Download our model form huggingface
+Quick Deployment
+----------------
+
+
+1. Download LLaMA-13B from huggingface: https://huggingface.co/huggyllama/llama-13b
+
+2. Download our model form huggingface
 
 
 .. code-block::
@@ -63,7 +69,7 @@ Convert delta-model to the pretrained model
 
     python {path_to_pandallm}/apply_delta.py --base_model {path_to_your_LLaMA-13B_model} --target_model {path_to_pandallm}/pretrained_model/panda-13B --delta_model {path_to_pandallm}/delta-models/llama-panda-13b-zh-wudao-chat-delta/checkpoint-3000-delta
 
-4. Run the following command to deploy the chatbot
+3. Run the following command to deploy the chatbot
 
 .. code-block::
 
@@ -72,18 +78,18 @@ Convert delta-model to the pretrained model
 
 
 Quick Train
-^^^^^^^^^^^^^^^^^^^^^^
+-----------
 
 If you have already done the 1-3 steps in Quick Deployment, you can directly run the following command to train the model. Otherwise, please follow the 1-3 steps in Quick Deployment.
 
-4. Prepare the training data
+1. Prepare the training data
 
 You can download the training data from https://entuedu-my.sharepoint.com/:f:/r/personal/tianze002_e_ntu_edu_sg/Documents/Panda%E5%A4%A7%E6%A8%A1%E5%9E%8B/dataset?csf=1&web=1&e=0i1Oiu
 
 After you download the training data, please put the data folderunder the root path of {path_to_pandallm}.
 
 
-5. Run the following command to train the model.
+2. Run the following command to train the model.
 
 .. code-block::
 
