@@ -95,7 +95,7 @@ To fine-tune your custom LLM model, follow these steps:
 Optimization Settings
 ---------------------
 
-The PandaLLM framework enables you to adjust the training hyper-parameters by specifying the following arguments. Here is a description of each argument:
+The PandaLLM framework provides several features for training, including automatic gradient accumulation, `NVLAMB <https://arxiv.org/abs/1904.00962>`_ optimizer integration, and quantization-aware training based on `BitsandBytes <https://github.com/facebookresearch/bitsandbytes>`_. To customize the training hyperparameters, you can specify the following arguments. Here is a description of each argument:
 
 
 --per_gpu_train_batch_size  The batch size for each GPU during training. The default value is :math:`1`.
@@ -104,13 +104,15 @@ The PandaLLM framework enables you to adjust the training hyper-parameters by sp
 
 --optimizer  The training optimizer. The default value is ``"AdamW"``.
 
---learning_rate  The learning rate for each batch of the model during training. The default value is :math:`1e-3`.
+--learning_rate  The learning rate for each batch of the model during training. The default value is :math:`0.001`.
+
+--lr_scheduler  The learning rate scheduler options, including ``"linear"``, ``"cosine"``, ``"constant"``, ``"poly"``, and ``"warmup"``. The default value is ``"warmup"`` when the argument is not specified.
 
 --gradient_accumulation_steps  Number of gradient accumulation steps before performing a backward/update pass. The default value is :math:`64`.
 
 --weight_decay  The weight decay applied to all parameters of the model. The default value is :math:`0.00`.
 
---adam_epsilon  :math:`\varepsilon` value for the Adam optimizer. The default value is :math:`1e-6`.
+--adam_epsilon  :math:`\varepsilon` value for the Adam optimizer. The default value is :math:`10^{-6}`.
 
 --adam_betas  :math:`\beta` coefficients used for computing moving averages of gradients and squared gradients in the Adam optimizer. The default value is :math:`(0.9, 0.99)`.
 
@@ -129,7 +131,7 @@ The PandaLLM framework enables you to adjust the training hyper-parameters by sp
 --bit_training  This ``boolean`` argument specifies the bit training mode for quantization-aware training. It determines the precision of weights and activations during training. The default value is ``False``.
 
 
-To finetune a ``Panda-7B`` model with a learning rate of :math:`2e-3` for :math:`2` epochs, execute the following command:
+To finetune a ``Panda-7B`` model with a learning rate of :math:`0.002` for :math:`2` epochs, execute the following command:
 
 .. code-block:: console
 
