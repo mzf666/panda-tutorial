@@ -11,8 +11,8 @@ Contents
 --------
 
 .. toctree::
-	test
-	quick_start
+    test
+    quick_start
     install
     train
     deploy
