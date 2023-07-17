@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="53097928-0afa-4595-bb0e-35b5c02d88b4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/docs/source/quick_start.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/quick_start.rst" afterDir="false" />
-    </list>
+    <list default="true" id="53097928-0afa-4595-bb0e-35b5c02d88b4" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

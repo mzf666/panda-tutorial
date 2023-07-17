@@ -6,6 +6,8 @@ Quick Start
 
 `PandaLLM Github <https://github.com/dandelionsllm/pandallm>`_
 
+We will take deployment and training of Panda-13B as an example.
+
 .. _installation:
 
 Installation
@@ -64,7 +66,7 @@ Quick Deployment
      (pandallm) $ cd ..
      (pandallm) $ mv delta-models/ ./
 
-4. Convert ``"delta-model"`` to a pretrained model.
+4. Convert ``"delta-model"`` to a pretrained model. Replace ${PATH_TO_YOUR_MODEL} with your desired model path, where your model will be saved there.
 
 .. code-block:: console
 
@@ -91,6 +93,6 @@ Before you can directly train the model with the following commands, make sure y
 
 .. code-block:: console
 
-  (pandallm) $ deepspeed --include localhost:0,1,2,3,4,5,6,7  trainer_base_ds_mul.py -cp conf/llama/zh/ -cn llama_13b_zh_instruct_sft_combine_v1_0_ds
+  (pandallm) $ PAD_TOKEN="</s>" deepspeed --include localhost:0,1,2,3,4,5,6,7  trainer_base_ds_mul.py -cp conf/llama/zh/ -cn llama_13b_zh_instruct_sft_combine_v1_0_ds
 
 If you have less than :math:`8` GPUs, you can change the ``--include parameter`` to the GPUs you have, e.g. ``"--include localhost:0,1,2,3"`` if you have :math:`4` GPUS on one server.
