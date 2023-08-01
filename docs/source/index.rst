@@ -13,4 +13,5 @@ Contents
 .. toctree::
     quick_start
     train
+    inference
     deploy
