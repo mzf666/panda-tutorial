@@ -5,12 +5,12 @@ In this project, we support several approaches for inference:
 
 - HuggingFace Transformers' naive model parallel
 - Deepspeed inference (tensor parallel)
-- Tensor parallel (supported by `tensor_parallel` pypi package)
+- Tensor parallel (supported by ``tensor-parallel`` pypi package)
 
 HuggingFace Transformers' Model Parallel
 ----------------------------------------
 
-This feature can be quite easy to be enabled by specify `device_map` during calling `xxx.from_pretrained` method.
+This feature can be quite easy to be enabled by specify ``device_map`` during calling ``xxx.from_pretrained`` method.
 Note that you this is not distributed evaluation, so you cannot launch multiple processes when using this feature.
 
 Deepspeed Inference

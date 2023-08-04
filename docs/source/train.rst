@@ -27,17 +27,18 @@ some scripts to automatically generate config file, you may need to have a basic
 
 Despite simple hyper-parameter configuration, the main feature we prefer to use hydra is dynamically function calling, which enables decoupled
 module implements, including training & inference workflow, data processing, and model initialization.
-Another approach to implement this is through module registration, like that in `Fairseq` or `OpenMMLab`. However, the registration needs
+Another approach to implement this is through module registration, like that in ``Fairseq`` or ``OpenMMLab``. However, the registration needs
 to load all registered modules at the very beginning, which will lead to high latency when the project becoming larger and difficult to manage
 for fast iteration.
 
-Now, let's take a look at an example for data loading. In `general_util.training_utils`, we use `load_and_cache_examples` to load dataset.
+Now, let's take a look at an example for data loading. In ``general_util.training_utils``, we use ``load_and_cache_examples`` to load dataset.
 Then you can find following code snippet to initialize dataset:
+
 .. code-block:: python
 
     dataset = hydra.utils.call(cfg, file_path=file_path, tokenizer=tokenizer)
 
-where `cfg.read_tensor` points to a field in the configuration as follows:
+where ``cfg.read_tensor`` points to a field in the configuration as follows:
 
 .. code-block:: yaml
 
@@ -45,9 +46,9 @@ where `cfg.read_tensor` points to a field in the configuration as follows:
       _target_: data.collators.zh_instruct.TextDatasetUnifyV3
       pair_file_list: data/files/c4/en/p25/partition_*.json
 
-Here, the `_target_` fields refers to the path of the function you want to call during runtime, following which is the name-based arguments.
-`_target` can also point to a class (like the above example), in which case the `__init__` method of the class will be called.
-Some parameters can also be specified regularly in `hydra.utils.call` method.
+Here, the ``_target_`` fields refers to the path of the function you want to call during runtime, following which is the name-based arguments.
+``_target_`` can also point to a class (like the above example), in which case the ``__init__`` method of the class will be called.
+Some parameters can also be specified regularly in ``hydra.utils.call`` method.
 This is what you should take care by defining a common interface shared by all modules.
 
 Benefiting from the above feature, you can define any workload by yourself as it returns a `Dataset` object and do not need to explicitly import it in the main script.
