@@ -15,3 +15,4 @@ Contents
     train
     inference
     deploy
+    pipeline
