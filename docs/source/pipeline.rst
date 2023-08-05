@@ -1,5 +1,5 @@
 Pipeline Parallelism
-=============================================================
+====================
 
 Preliminary
 -----------
@@ -21,9 +21,10 @@ And in the following sections, we will introduce the modification of the main tr
 and tackle the possible problems you may encounter during implementing your onw model.
 
 Core Code Snippets
-----------------------
+------------------
 
-### Model Implementation
+Model Implementation
+^^^^^^^^^^^^^^^^^^^^
 
 First of all, currently all pipeline parallelism implementation requires you to use `nn.Sequential` to re-organize our model, and the inputs/outputs should be tuple.
 This is used for asynchronous forward and backward passes. The easiest way to do this is adding a simple wrapper to inherit Transformer layer and override the ``forward`` function
@@ -142,7 +143,8 @@ It's indeed a tuple over tuple. And for the second case, you should specify the 
 
 
 
-### Model initialization
+Model initialization
+^^^^^^^^^^^^^^^^^^^^
 
 There are two main approaches to enable model initialization and loading pre-trained weights. One is first initializing the model using the ``from_pretrained`` function.
 In this case, you may refer to ``models.llama_ds_mp_wrap.get_model`` for details.
@@ -196,7 +198,8 @@ The core code snippet is as follows:
         sub_train_sampler = RandomSampler(sub_train_dataset)
 
 
-### Data Fetch Design of DeepSpeed and CPU Memory Reduction
+Data Fetch Design of DeepSpeed and CPU Memory Reduction
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In DeepSpeed design, among specific PP group, only the first and the last rank, i.e., ``stage=0 or stage=num_stages - 1``,
 will fetch minibatch from dataloader, and the other ranks never fetch data.
@@ -263,9 +266,11 @@ The code of dataset placeholder is as follows:
 
 where ``TestDataset`` is an empty dataset and the collator is arbitrary one meeting the input format.
 
-## Know Problems and Possible Solutions
+Know Problems and Possible Solutions
+------------------------------------
 
-### BF16 Support
+BF16 Support
+^^^^^^^^^^^^
 
 Bfloat16 can be used by setting the following in deepspeed config:
 
@@ -277,26 +282,19 @@ Bfloat16 can be used by setting the following in deepspeed config:
 
 However, bfloat16 cannot be used with optimizer offload. Note that pipeline parallelism is designed not to support optimizer offload (see issue [\#3866](https://github.com/microsoft/DeepSpeed/issues/3866)). Nevertheless, it can still be enabled under fp16 training.
 
-### Flash Attention
+..
+ ### Flash Attention
 
-I cannot enable flash attention using both the original implementation or `torch.nn.functional.scaled_dot_product_attention` from pytorch 2.0. See issue [here](https://github.com/HuangLK/llama-deepspeed/issues/36) and [here](https://github.com/microsoft/DeepSpeed/issues/3868).
+ I cannot enable flash attention using both the original implementation or `torch.nn.functional.scaled_dot_product_attention` from pytorch 2.0. See issue [here](https://github.com/HuangLK/llama-deepspeed/issues/36) and [here](https://github.com/microsoft/DeepSpeed/issues/3868).
 
-### Torch Compile
+Torch Compile
+^^^^^^^^^^^^^
 
 Torch compilation is not supported in the template, which perhaps becuase my writing is incorrect.
 
-## Reference & Acknowledgement
+Reference & Acknowledgement
+---------------------------
 
 1. [llama-deepspeed](https://github.com/HuangLK/llama-deepspeed/tree/main)
 2. [ChatGLM-Finetuning](https://github.com/liucongg/ChatGLM-Finetuning)
 3. [DeepSpeed Pipeline Parallelism Tutorial](https://www.deepspeed.ai/tutorials/pipeline/)
-
-[//]: # (### Quick Notes)
-
-[//]: # ()
-[//]: # (#### Data fetech)
-
-[//]: # ()
-[//]: # (1. Currently most implementations uses `shuffle=True` instead of `DistributedSampler` or `RandomSampler` of pytorch in data loader. I find that for `wordld_size=4` scenario, only the first rank and the last one fetech data from data loader. This can be verified by adding print information in `__getitem__` method of specific dataset. However, when really training, I find that only the batch feteched from the first rank will be really send to model. This is consistent with what I thought about pipeline parallelism that only one rank feteches data and the other ranks only take the outputs from the previous rank as iputs.)
-
-[//]: # (2. There is a bug in Deepspeed hybrid engine loading model checkpoint that there mush be optimizer states in the specific dir, check it [here]&#40;https://github.com/HuangLK/llama-deepspeed/issues/28&#41;.)
