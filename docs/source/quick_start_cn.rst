@@ -33,7 +33,7 @@
 快速部署
 ----------------
 
-1. 从 `Huggingface <https://huggingface.co/huggyllama/llama-13b>`_ 下载 ``LlaMA-13B`` 
+1. 从 `Huggingface <https://huggingface.co/huggyllama/llama-13b>`_ 下载 ``LlaMA-13B`` 。
 
 2. 从Huggingface下载我们的模型。由于模型文件对于git clone来说太大了，您可以从 `这里 <https://huggingface.co/chitanda/llama-panda-13b-zh-wudao-chat-delta>`_ 手动下载模型文件。
 
