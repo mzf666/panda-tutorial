@@ -53,7 +53,7 @@
 数据准备
 ----------------
 
-第一步是为 PandaLLM 准备训练数据集。您可以下载所有必要的数据集，包括**指令调优**数据集（例如，Wiki-zh）和**预训练数据集**（例如，Wudao），`此处 <https://entuedu-my.sharepoint.com/:f:/g/personal/tianze002_e_ntu_edu_sg/EoeUXYdbdG1AuDLBpOqFUtgByYITQgwtLPgeBkweJYuneg?e=t9583n>`_。我们的 PandaLLM 训练框架为指令调优和预训练数据集提供了自动数据加载器。数据集应采用 ``.json`` 格式。
+第一步是为 PandaLLM 准备训练数据集。您可以从 `此处 <https://entuedu-my.sharepoint.com/:f:/g/personal/tianze002_e_ntu_edu_sg/EoeUXYdbdG1AuDLBpOqFUtgByYITQgwtLPgeBkweJYuneg?e=t9583n>`_ 下载所有必要的数据集，包括 **指令调优** 数据集（例如，Wiki-zh）和 **预训练数据集** （例如，Wudao）。我们的 PandaLLM 训练框架为指令调优和预训练数据集提供了自动数据加载器。数据集应采用 ``.json`` 格式。
 
 在下面的示例中，指令调优数据包括 ``"input"`` 和 ``"target"``。值得注意的是，在训练期间，指令提示 ``"input"`` 被遮蔽，并且不会对梯度反向传播有所贡献。
 
@@ -123,7 +123,7 @@ PandaLLM框架支持多种LLM架构，您可以使用以下的 ``--model`` 参�
 
 要微调您的自定义LLM模型，请按照以下步骤操作：
 
-1.  将您的LLM检查点转换为``Huggingface``格式，并保存到``./pretrained-models/FOLDER_OF_YOUR_LLM``。
+1.  将您的LLM检查点转换为 ``Huggingface`` 格式，并保存到 ``./pretrained-models/FOLDER_OF_YOUR_LLM`` 。
 #.  执行以下命令
 
     .. code-block:: console
@@ -179,7 +179,7 @@ PandaLLM框架为训练提供了几个功能，包括自动梯度累积，`NVLAM
 低秩适应 (LoRA)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-PandaLLM支持使用 `LoRA <https://github.com/huggingface/peft>`_ 微调LLM。例如，要使用LoRA启动``LlaMA-65B``模型的训练过程，请执行以下命令：
+PandaLLM支持使用 `LoRA <https://github.com/huggingface/peft>`_ 微调LLM。例如，要使用LoRA启动 ``LlaMA-65B`` 模型的训练过程，请执行以下命令：
 
 .. code-block:: console
 
