@@ -1,4 +1,4 @@
-Welcome to PandaLLMOps! 欢迎来到 PandLLMOps !
+Welcome to PandaLLMOps!
 ===================================
 
 **PandaLLMOps** is an open-sourced Python framework for large language models (LLMs) training and inference.
@@ -6,7 +6,6 @@ Welcome to PandaLLMOps! 欢迎来到 PandLLMOps !
 .. note::
 
    This tutorial is under active development.
-   该教程持续更新中
 
 Contents
 --------
@@ -19,4 +18,6 @@ Contents
     pipeline
     quick_start_cn
     train_cn
-
+    inference_cn
+    deploy_cn
+    pipeline_cn
