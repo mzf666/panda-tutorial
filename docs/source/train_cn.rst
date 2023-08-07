@@ -175,3 +175,32 @@ PandaLLM框架为训练提供了几个功能，包括自动梯度累积，`NVLAM
 .. code-block:: console
 
         (pandallm) $ python train.py --model llama-7b --ckpt_path chitanda/llama-panda-zh-7b-delta --learing_rate 2e-3 --num_train_epochs 2
+
+低秩适应 (LoRA)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+PandaLLM支持使用 `LoRA <https://github.com/huggingface/peft>`_ 微调LLM。例如，要使用LoRA启动``LlaMA-65B``模型的训练过程，请执行以下命令：
+
+.. code-block:: console
+
+        (pandallm) $ python train.py --model llama-65b --use_lora --lora_r 64 --lora_alpha 16 --lora_dropout 0.05
+
+您可以通过指定以下参数来自定义LoRA在LLM训练过程中的行为。
+
+--use_lora  此 ``boolean`` 参数在训练过程中启用 LoRA 。指定后，LoRA将整合到LLM的训练中。
+
+--lora_r  此参数确定在LoRA适应期间每个令牌所考虑的本地邻居数量。默认值设置为 :math:`64`。
+
+--lora_alpha  此参数控制LoRA的适应强度。它影响模型对局部关联的适应程度。默认值设置为 :math:`16`。
+
+--lora_dropout  此参数指定在LoRA适应期间应用的退出率。退出有助于规范训练过程并防止过度拟合。默认值设置为 :math:`0.05`。
+
+
+Quantization-aware training
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+PandaLLM基于 `BitsandBytes <https://github.com/facebookresearch/bitsandbytes>`_ 框架启用Quantization-aware training。例如，要使用 `BitsandBytes` 量化方案训练具有 :math:`4` 位精度的 ``LlaMA-65B`` 模型，请执行以下命令：
+
+.. code-block:: console
+
+        (pandallm) $ python train.py --model llama-65b --use_quant
