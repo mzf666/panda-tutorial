@@ -1,7 +1,7 @@
-Welcome to PandaLLM!
+Welcome to PandaLLMOps!
 ===================================
 
-**PandaLLM** is an open-sourced Python framework for large language models (LLMs) training and inference.
+**PandaLLMOps** is an open-sourced Python framework for large language models (LLMs) training and inference.
 
 .. note::
 
