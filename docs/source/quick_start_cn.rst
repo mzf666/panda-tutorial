@@ -83,7 +83,7 @@
 快速训练
 -----------
 
-在直接使用以下命令训练模型之前，请确保您已经完成了 :ref:`installation <installation>`.
+在直接使用以下命令训练模型之前，请确保您已经完成了 :ref:`安装 <installation>`.
 
 1. 准备训练数据。您可以从 `这里 <https://entuedu-my.sharepoint.com/:f:/r/personal/tianze002_e_ntu_edu_sg/Documents/Panda%E5%A4%A7%E6%A8%A1%E5%9E%8B/dataset?csf=1&web=1&e=0i1Oiu>`_ 下载训练数据。请将数据文件夹放在 ``./dataset``。
 
