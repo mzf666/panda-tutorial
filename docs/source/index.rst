@@ -21,6 +21,4 @@ Contents
     pipeline
     quick_start_cn
     train_cn
-    inference_cn
-    deploy_cn
-    pipeline_cn
+
