@@ -138,7 +138,7 @@ PandaLLM框架支持多种LLM架构，您可以使用以下的 ``--model`` 参�
 通用设置
 ^^^^^^^^^^^^^^^^
 
-PandaLLM框架为训练提供了几个功能，包括自动梯度累积，`NVLAMB <https://arxiv.org/abs/1904.00962>`_ 优化器集成，以及基于`BitsandBytes <https://github.com/facebookresearch/bitsandbytes>`_ 的量化感知训练。要自定义训练超参数，您可以指定以下参数。下面是每个参数的描述：
+PandaLLM框架为训练提供了几个功能，包括自动梯度累积，`NVLAMB <https://arxiv.org/abs/1904.00962>`_ 优化器集成，以及基于 `BitsandBytes <https://github.com/facebookresearch/bitsandbytes>`_ 的量化感知训练。要自定义训练超参数，您可以指定以下参数。下面是每个参数的描述：
 
 --per_gpu_train_batch_size  训练期间每个GPU的批量大小。默认值为 :math:`1`。
 
