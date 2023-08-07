@@ -12,8 +12,8 @@ Contents
 
 .. toctree::
     quick_start
-    quick_start_cn
     train
     inference
     deploy
     pipeline
+    quick_start_cn
